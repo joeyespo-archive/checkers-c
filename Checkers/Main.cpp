@@ -114,19 +114,19 @@ INT Init (HINSTANCE hInstance, LPSTR lpCmdLine, int nShowCmd)
   wcex.cbClsExtra = 0; wcex.cbWndExtra = 0;
   wcex.hbrBackground = NULL;
   wcex.lpszMenuName = NULL;
-  if (!RegisterClassEx(&wcex)) AppFailed("Could not register window");  // Register main window
-
+  if (!RegisterClassEx(&wcex)) return AppFailed("Could not register window");  // Register main window
+  
   // Game window
   wcex.lpszClassName = ID_GAMEWND_CLASSNAME;
   wcex.lpfnWndProc = (WNDPROC)wndGameProc;
-  if (!RegisterClassEx(&wcex)) AppFailed("Could not register window");  // Register game window
+  if (!RegisterClassEx(&wcex)) return AppFailed("Could not register window");  // Register game window
 
   // About window
   wcex.lpszClassName = ID_ABOUTWND_CLASSNAME;
   wcex.hIcon = NULL; wcex.hIconSm = NULL;
   wcex.lpfnWndProc = (WNDPROC)wndAboutProc;
   wcex.cbWndExtra = DLGWINDOWEXTRA;
-  if (!RegisterClassEx(&wcex)) AppFailed("Could not register window");  // Register about window
+  if (!RegisterClassEx(&wcex)) return AppFailed("Could not register window");  // Register about window
 
 
 
@@ -170,9 +170,9 @@ INT Terminate ()
   DeleteObject(hFont_Main);        // Delete Font Object
   
   // Unregister windows classes
-  UnregisterClass(ID_MAINWND_CLASSNAME, hInstance);
-  UnregisterClass(ID_GAMEWND_CLASSNAME, hInstance);
   UnregisterClass(ID_ABOUTWND_CLASSNAME, hInstance);
+  UnregisterClass(ID_GAMEWND_CLASSNAME, hInstance);
+  UnregisterClass(ID_MAINWND_CLASSNAME, hInstance);
 
   return 0;
 }

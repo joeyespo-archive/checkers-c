@@ -110,11 +110,11 @@ LRESULT CALLBACK wndMainProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
       // --------------
       
       // Create game buttons
-      hwndTemp = CreateButton(NULL, (WS_CHILD | WS_TABSTOP | WS_VISIBLE | BS_PUSHBUTTON | BS_ICON | BS_NOTIFY), 8, 80, 45, 42, hWnd, ID_BTN_1PLAYER, hInstance);
+      hwndTemp = CreateButton("ok", (WS_CHILD | WS_TABSTOP | WS_VISIBLE | BS_PUSHBUTTON | BS_ICON | BS_NOTIFY), 8, 80, 45, 42, hWnd, ID_BTN_1PLAYER, hInstance);
        SendMessage(hwndTemp, BM_SETIMAGE, (WPARAM)IMAGE_ICON, (WPARAM)lpMainInfo->hico1Player);
-      hwndTemp = CreateButton(NULL, (WS_CHILD | WS_TABSTOP | WS_VISIBLE | BS_PUSHBUTTON | BS_ICON | BS_NOTIFY), 60, 80, 45, 42, hWnd, ID_BTN_2PLAYER, hInstance);
+      hwndTemp = CreateButton("ok", (WS_CHILD | WS_TABSTOP | WS_VISIBLE | BS_PUSHBUTTON | BS_ICON | BS_NOTIFY), 60, 80, 45, 42, hWnd, ID_BTN_2PLAYER, hInstance);
        SendMessage(hwndTemp, BM_SETIMAGE, (WPARAM)IMAGE_ICON, (WPARAM)lpMainInfo->hico2Player);
-      hwndTemp = CreateButton(NULL, (WS_CHILD | WS_TABSTOP | WS_VISIBLE | BS_PUSHBUTTON | BS_ICON | BS_NOTIFY), 120, 80, 45, 42, hWnd, ID_BTN_ONLINE, hInstance);
+      hwndTemp = CreateButton("ok", (WS_CHILD | WS_TABSTOP | WS_VISIBLE | BS_PUSHBUTTON | BS_ICON | BS_NOTIFY), 120, 80, 45, 42, hWnd, ID_BTN_ONLINE, hInstance);
        SendMessage(hwndTemp, BM_SETIMAGE, (WPARAM)IMAGE_ICON, (WPARAM)lpMainInfo->hicoOnline);
       
       // Create menu buttons
@@ -128,7 +128,7 @@ LRESULT CALLBACK wndMainProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
       break;
     
     case WM_ACTIVATE:
-      
+      /*
       // Focus correct button
       if ((LOWORD(wParam) != WA_INACTIVE) && (HIWORD(wParam) == FALSE))
       {
@@ -147,9 +147,13 @@ LRESULT CALLBACK wndMainProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
             }
           }
         }
-      }
+      }*/
       
       break;
+      
+    //!!!!! case WM_MOUSEACTIVATE:
+    //  
+    //  return MA_NOACTIVATEANDEAT;
     
     case WM_PAINT:
       
