@@ -80,7 +80,6 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
-# SUBTRACT LINK32 /pdb:none
 
 !ENDIF 
 
@@ -102,179 +101,69 @@ SOURCE=.\Main.h
 # End Group
 # Begin Group "Header Files"
 
-# PROP Default_Filter "h,hpp,h++,hxx"
+# PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=.\frmAbout.h
+SOURCE=.\wndAbout.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\frmGame.h
+SOURCE=.\wndGame.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\frmMain.h
+SOURCE=.\wndMain.h
 # End Source File
 # End Group
 # Begin Group "Source Files"
 
-# PROP Default_Filter "c,cpp,c++,cxx"
+# PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=.\frmAbout.cpp
+SOURCE=.\wndAbout.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\frmGame.cpp
+SOURCE=.\wndGame.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\frmMain.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\Libraries.cpp
-# End Source File
-# End Group
-# Begin Group "Checkers Headers"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\..\Include\eCheckers\eCkGame.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\Include\eCkWindow\eCkWindow.h
-# End Source File
-# End Group
-# Begin Group "Checkers Sources"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\..\Include\eCheckers\eCkGame.cpp
-
-!IF  "$(CFG)" == "Checkers - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "Checkers - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\Include\eCkWindow\eCkWindow.cpp
-
-!IF  "$(CFG)" == "Checkers - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "Checkers - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ENDIF 
-
+SOURCE=.\wndMain.cpp
 # End Source File
 # End Group
 # Begin Group "Resource Files"
 
-# PROP Default_Filter "rc"
+# PROP Default_Filter ""
 # Begin Group "Resources"
 
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\Res\Main.rc
+SOURCE=.\Res\Resource.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\Res\resource.h
+SOURCE=.\Res\Resource.rc
 # End Source File
 # End Group
 # Begin Group "Resource Data"
 
-# PROP Default_Filter "ico,cur,bmp"
+# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # Begin Source File
 
-SOURCE=".\Res\Graphics\Menu\1Player (Highlight).ico"
+SOURCE=.\Res\Graphics\Menu\1P.ico
 # End Source File
 # Begin Source File
 
-SOURCE=.\Res\Graphics\1Player.ico
+SOURCE=.\Res\Graphics\Menu\1P_Over.ico
 # End Source File
 # Begin Source File
 
-SOURCE=.\Res\Graphics\Menu\1Player.ico
+SOURCE=.\Res\Graphics\Menu\2P.ico
 # End Source File
 # Begin Source File
 
-SOURCE=".\Res\Graphics\Menu\2Player (Highlight).ico"
-# End Source File
-# Begin Source File
-
-SOURCE=.\Res\Graphics\Menu\2Player.ico
-# End Source File
-# Begin Source File
-
-SOURCE=.\Res\Graphics\Pieces\Black.cur
-# End Source File
-# Begin Source File
-
-SOURCE=.\Res\Graphics\Pieces\Black.ico
-# End Source File
-# Begin Source File
-
-SOURCE=.\Res\Graphics\Pieces\Black_King.cur
-# End Source File
-# Begin Source File
-
-SOURCE=.\Res\Graphics\Pieces\Black_King.ico
-# End Source File
-# Begin Source File
-
-SOURCE=.\Res\Graphics\Checkers.ico
-# End Source File
-# Begin Source File
-
-SOURCE=.\Res\Graphics\Pieces\Gold.cur
-# End Source File
-# Begin Source File
-
-SOURCE=.\Res\Graphics\Pieces\Gold_King.cur
-# End Source File
-# Begin Source File
-
-SOURCE=.\Res\Graphics\Icon.ico
-# End Source File
-# Begin Source File
-
-SOURCE=".\Res\Graphics\King (Black).ico"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Res\Graphics\Pieces\King (Black).ico"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Res\Graphics\King (Red).ico"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Res\Graphics\Pieces\King (Red).ico"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Res\Graphics\Logo (Big).ico"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Res\Graphics\Logo (Small).ico"
-# End Source File
-# Begin Source File
-
-SOURCE=.\Res\Graphics\Logos\Logo.bmp
+SOURCE=.\Res\Graphics\Menu\2P_Over.ico
 # End Source File
 # Begin Source File
 
@@ -282,7 +171,11 @@ SOURCE=.\Res\Graphics\Logo.ico
 # End Source File
 # Begin Source File
 
-SOURCE=".\Res\Graphics\Menu\Online (Highlight).ico"
+SOURCE=".\Res\Graphics\Main [Small].ico"
+# End Source File
+# Begin Source File
+
+SOURCE=.\Res\Graphics\Main.ico
 # End Source File
 # Begin Source File
 
@@ -290,35 +183,7 @@ SOURCE=.\Res\Graphics\Menu\Online.ico
 # End Source File
 # Begin Source File
 
-SOURCE=".\Res\Graphics\Pawn (Black).ico"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Res\Graphics\Pieces\Pawn (Black).ico"
-# End Source File
-# Begin Source File
-
-SOURCE=".\Res\Graphics\Pawn (Red).ico"
-# End Source File
-# Begin Source File
-
-SOURCE=.\Res\Graphics\Pieces\Red.cur
-# End Source File
-# Begin Source File
-
-SOURCE=.\Res\Graphics\Pieces\Red.ico
-# End Source File
-# Begin Source File
-
-SOURCE=.\Res\Graphics\Pieces\Red_King.cur
-# End Source File
-# Begin Source File
-
-SOURCE=.\Res\Graphics\Pieces\Red_King.ico
-# End Source File
-# Begin Source File
-
-SOURCE=.\Res\Graphics\SinglePlayer.ico
+SOURCE=.\Res\Graphics\Menu\Online_Over.ico
 # End Source File
 # End Group
 # End Group

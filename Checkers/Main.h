@@ -1,5 +1,5 @@
-// Main.h - Checkers
-// Entry Point Header of Application
+// Main.h
+// Entry Point Header File
 // By Joe Esposito
 
 
@@ -7,20 +7,25 @@
 
 
 
-// Libraries
-// ----------
+// Include Libraries
+// ------------------
 
+// General headers
+#include <Time.h>  // !!!!! Use time functions for gameplay timer
+
+// Windows headers
 #include <Windows.h>
+#include <mmSystem.h>
+#include <RichEdit.h>
 #include <eLibWin.h>
 #include <eThemes.h>
 #include <eGradient.h>
-#include <RichEdit.h>
-#include <mmSystem.h>
-#include <Time.h>	// !!!!! Use time functions for gameplay timer
 
-#define ECKWINDOW_INCLUDE	// !!!!!
+// Checkers headers
+#define ECKWINDOW_INCLUDE  // !!!!!
 #include <eCkWindow.h>
 
+// Resource header
 #include "Res\Resource.h"
 
 
@@ -28,9 +33,17 @@
 // Application Window Classes
 // ---------------------------
 
-#define ID_MAINWND_CLASSNAME	"_espo@@CheckersMain"
-#define ID_ABOUTWND_CLASSNAME	"_espo@@CheckersAbout"
-#define ID_GAMEWND_CLASSNAME	"_espo@@CheckersGame"
+#define ID_MAINWND_CLASSNAME    "_espo@@CheckersMain"
+#define ID_GAMEWND_CLASSNAME    "_espo@@CheckersGame"
+#define ID_ABOUTWND_CLASSNAME   "_espo@@CheckersAbout"
+
+
+
+// Global Macros
+// --------------
+
+#define SAFE_DESTROYICON(icon)  if (icon) { DeleteObject(icon); icon = NULL; }
+#define SAFE_DELETEOBJ(obj)     if (obj) { DeleteObject(obj); obj = NULL; }
 
 
 
@@ -40,44 +53,48 @@
 // Application Options
 typedef struct _APPOPTIONS
 {
-	unsigned long bShowQuitConfirm : 1;
-	unsigned long bStartLastPosition : 1;
-	int lastX;
-	int lastY;
-	COLORREF crSquare1;
-	COLORREF crSquare2;
+  unsigned long bShowQuitConfirm : 1;
+  unsigned long bStartLastPosition : 1;
+  int lastX;
+  int lastY;
+  COLORREF crSquare1;
+  COLORREF crSquare2;
 } APPOPTIONS, *LPAPPOPTIONS;
 
 
 
-// Global Variables
-// -----------------
+// Globals
+// --------
 
-extern HINSTANCE hInstance;				// Application's current hInstance
+// Instance variables
+extern HINSTANCE hInstance;            // Application's current hInstance
 
-extern HWND hDialogWnd;					// Current [focused] dialog window
-
-extern HFONT hFont_Main;				// Main Font (Normal)
-extern HFONT hFont_MainBold;			// Main Font (Bold)
-
-extern APPOPTIONS oOptions;				// Application Options
+// Application Variables
+extern HWND hDialogWnd;              // Current [focused] dialog window
+extern HFONT hFont_Main;            // Main Font (Normal)
+extern HFONT hFont_MainBold;          // Main Font (Bold)
+extern APPOPTIONS oOptions;            // Application Options
 
 
 
 // Global Declarations
 // --------------------
 
-INT AppFailed ( char *lpszError = NULL );		// If loading fails
-void LoadAppOptions ( LPAPPOPTIONS lpOptions );	// Load application options
+// Application initialization functions
+INT Init ( HINSTANCE hInstance, LPSTR lpCmdLine, int nShowCmd );  // Initializes application
+INT Terminate ();  // Terminates application
+INT AppFailed ( char *lpszError = NULL );    // Called when loading fails
+BOOL LoadAppOptions ( LPAPPOPTIONS lpOptions );  // Loads application options
 
 
 
 // Include Headers
 // ----------------
 
-#include "frmMain.h"
-#include "frmAbout.h"
-#include "frmGame.h"
+// Windows
+#include "wndMain.h"        // Main window header
+#include "wndGame.h"        // Main window header
+#include "wndAbout.h"       // About window header
 
 
 
