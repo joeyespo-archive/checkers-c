@@ -9,8 +9,9 @@
 // !!!!! ToDo !!!!!
 // ----------------------------------------------------------------------------------------
 // 
+// - Change all 'frm' to 'wnd'
+// 
 // - eCheckers:
-//   - Create SendCkMessage() and messages
 //   - Make game rules
 //   - Return HGAME as an ID, not a pointer to actual LPGAME
 // 
@@ -48,6 +49,7 @@ int APIENTRY WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 {
 	HWND hWnd;
 	HMODULE hRichEdit;
+	MSG msg;
 
 
 	// Initialize Globals
@@ -91,9 +93,11 @@ int APIENTRY WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 	wcex.lpszClassName = ID_ABOUTWND_CLASSNAME;
 	wcex.hIcon = NULL; wcex.hIconSm = NULL;
 	wcex.lpfnWndProc = (WNDPROC)frmAboutProc;
+	wcex.cbWndExtra = DLGWINDOWEXTRA;
 
 	if (!RegisterClassEx(&wcex))
 		AppFailed("Could not register window");
+
 
 	// Checkers board window
 	if (!RegisterCheckersBoard(hInstance))
@@ -126,14 +130,15 @@ int APIENTRY WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 	// Create Main Window
 	// -------------------
 	
-	if ((hWnd = CreateMainWindow()) == NULL) AppFailed("Could not create window");
-	ShowWindow(hWnd, nShowCmd);
+	if (!PeekMessage(&msg, NULL, WM_QUIT, WM_QUIT, PM_NOREMOVE)) {
+		if ((hWnd = CreateMainWindow()) == NULL) AppFailed("Could not create window");
+		ShowWindow(hWnd, nShowCmd);
+	}
+
 
 
 	// Main Message Loop
 	// ------------------
-
-	MSG msg;
 
 	while (GetMessage(&msg, NULL, NULL, NULL))
 	{

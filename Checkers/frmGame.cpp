@@ -31,8 +31,9 @@
 // Local Variables
 // ----------------
 
-LOCAL HWND hGameWnd = NULL;
+LOCAL HWND hwndGameWnd = NULL;
 LOCAL HWND hwndGameBoard = NULL;
+LOCAL HWND hwndGameButton = NULL;
 LOCAL HBITMAP hbmpBackground = NULL;
 LOCAL HBITMAP hGameBoard;
 LOCAL INT nClientHeight, nClientWidth;
@@ -69,8 +70,8 @@ LRESULT CALLBACK frmGameProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 	{
 		case WM_CREATE:
 
-			if (hGameWnd != NULL) return -1;
-			hDialogWnd = (hGameWnd = hWnd);
+			if (hwndGameWnd != NULL) return -1;
+			hDialogWnd = (hwndGameWnd = hWnd);
 			
 
 			// Initialize Window
@@ -107,6 +108,10 @@ LRESULT CALLBACK frmGameProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 			// Create Window
 			// --------------
 
+			// Create controls
+			hwndGameButton = CreateWindow("button", "Start &Game", (WS_CHILD | WS_TABSTOP | WS_VISIBLE | BS_DEFPUSHBUTTON), 320, 8, 80, 30, hWnd, (HMENU)ID_BTN_START, hInstance, NULL);
+			 SendMessage(hwndGameButton, WM_SETFONT, (WPARAM)hFont_Main, 0);
+			
 			// Create board
 			hwndGameBoard = CreateWindowEx((WS_EX_CONTROLPARENT), "eckwindow", NULL, (WS_CHILD | WS_VISIBLE | CKS_AUTOSIZE | CKS_NOAUTOUPDATE), 8, 8, 0, 0, hWnd, (HMENU)ID_GAMEBOARD, hInstance, NULL);
 			 SendMessage(hwndGameBoard, WCKM_SETSCHEMECOLOR, CSI_BACKGROUND, COLOR_BOARD_BACKGROUND);
@@ -120,6 +125,13 @@ LRESULT CALLBACK frmGameProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 
 			// Create background
 			SendMessage(hWnd, WM_DRAWBACKGROUND, NULL, NULL);
+			break;
+
+		case WM_ACTIVATE:
+
+			if ((LOWORD(wParam) != WA_INACTIVE) && (HIWORD(wParam) == FALSE))
+			{ SetFocus(hwndGameButton); return 0; }
+
 			break;
 
 		case WM_DRAWBACKGROUND:
@@ -220,6 +232,23 @@ LRESULT CALLBACK frmGameProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 				// ---------------------
 
 				switch (LOWORD(wParam)) {
+				case ID_BTN_START:			// Game button
+					
+					if (!SendMessage(hwndGameBoard, WCKM_STARTED, NULL, (CKG_NORMAL)))
+					{
+						// Start the game
+						SetWindowText(hwndGameButton, "End &Game");
+						if (!SendMessage(hwndGameBoard, WCKM_STARTGAME, NULL, (CKG_NORMAL)))
+						{ SetWindowText(hwndGameButton, "Start &Game"); }
+					}
+					else {
+						// End the game
+						SetWindowText(hwndGameButton, "Start &Game");
+						if (!SendMessage(hwndGameBoard, WCKM_STOPGAME, NULL, FALSE))
+						{ SetWindowText(hwndGameButton, "End &Game"); }
+					}
+					break;
+
 				case ID_BTN_QUIT:			// Quit Game
 					
 					ModifyStyle((HWND)lParam, BS_DEFPUSHBUTTON, NULL, NULL);
@@ -239,6 +268,8 @@ LRESULT CALLBACK frmGameProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 					case WCKN_MOVEPIECE:		sndPlaySound("Sounds\\Drop.wav", (SND_ASYNC)); return 0;
 					case WCKN_JUMPPIECE:		sndPlaySound("Sounds\\Jump.wav", (SND_ASYNC)); return 0;
 					case WCKN_MULTIJUMPPIECE:	sndPlaySound("Sounds\\DblJump.wav", (SND_ASYNC)); return 0;
+					case WCKN_KINGED:			sndPlaySound("Sounds\\King.wav", (SND_ASYNC)); return 0;
+					case WCKN_ENDGAME:			sndPlaySound("Sounds\\EndGame.wav", (SND_ASYNC)); return 0;
 					} return 0;
 
 				}
@@ -272,7 +303,7 @@ LRESULT CALLBACK frmGameProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 			DestroyCursor(hcurPawn_Red); DestroyCursor(hcurKing_Red);
 			DestroyCursor(hcurPawn_Black); DestroyCursor(hcurKing_Black);
 
-			hGameWnd = NULL;
+			hwndGameWnd = NULL;
 			
 			EndGame();	// Failsafe
 			break;
@@ -286,7 +317,7 @@ BOOL DoGame (UINT param_uGame)
 {
 	HWND hWnd;
 
-	if (hGameWnd != NULL) return FALSE;
+	if (hwndGameWnd != NULL) return FALSE;
 
 	
 	uGame = param_uGame;	// !!!!! Type of game (1player, 2player, etc)
@@ -299,4 +330,4 @@ BOOL DoGame (UINT param_uGame)
 }
 
 void EndGame ()
-{ HWND hWnd = CreateMainWindow(); ShowWindow(hWnd, SW_SHOW); if (hGameWnd) DestroyWindow(hGameWnd); }
+{ HWND hWnd = CreateMainWindow(); ShowWindow(hWnd, SW_SHOW); if (hwndGameWnd) DestroyWindow(hwndGameWnd); }

@@ -264,12 +264,14 @@ LRESULT CALLBACK frmMainProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
  			
 			// Clean up
 			DestroyIcon(hicoLogo);
+			DeleteObject(hBackground);
 			DestroyIcon(hico1Player); DestroyIcon(hico1Player_Over);
 			DestroyIcon(hico2Player); DestroyIcon(hico2Player_Over);
 			DestroyIcon(hicoOnline); DestroyIcon(hicoOnline_Over);
-			DeleteObject(hBackground);
-			hMainWnd = NULL;
+			PlaySound(NULL, NULL, (SND_PURGE));
 			
+			hMainWnd = NULL;
+
 			if (bAppEnding) PostQuitMessage(0);
 			break;
 	}

@@ -11,7 +11,6 @@
 // ----------------
 
 #include <eLibWin.cpp>
-#include <eModal.cpp>
 
 #define ECKWINDOW_SOURCE
 #include <eCkWindow.h>

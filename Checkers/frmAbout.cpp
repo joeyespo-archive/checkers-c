@@ -29,14 +29,6 @@
 LOCAL UINT nWindowCount = 0;
 LOCAL HBITMAP hBackground = NULL;
 LOCAL HICON hicoLogo = NULL;
-LOCAL HWND hOK;
-
-
-
-// Local Functions
-// ----------------
-
-LOCAL VOID EndAbout ( HWND hWnd );
 
 
 
@@ -49,6 +41,7 @@ LRESULT CALLBACK frmAboutProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 	PAINTSTRUCT ps;
 	HBITMAP hbmTemp;
 	HFONT hftTemp;
+	HWND hwndTemp;
 	RECT rt;
 
 	switch (uMsg)
@@ -68,25 +61,32 @@ LRESULT CALLBACK frmAboutProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 			// Initialize window
 			// ------------------
 
-			nWindowCount++;
-			if (hicoLogo == NULL) hicoLogo = (HICON)LoadImage(hInstance, MAKEINTRESOURCE(icoMain), IMAGE_ICON, 0, 0, (LR_CREATEDIBSECTION));
+			if ((nWindowCount++) == 0)	// Increase window count by 1
+			{
+				// Initialize shared data
+				hBackground = CreateGradientBitmap(ClientWidth(hWnd), ClientHeight(hWnd), BG_GB_COLOR_TL, BG_GB_COLOR_BL, BG_GB_COLOR_TR, BG_GB_COLOR_BR);
+				hicoLogo = (HICON)LoadImage(hInstance, MAKEINTRESOURCE(icoMain), IMAGE_ICON, 0, 0, (LR_CREATEDIBSECTION));
+			}
 
 
 			// Create Window
 			// --------------
 
-			hOK = CreateWindow("button", "OK", (WS_CHILD | WS_TABSTOP | WS_VISIBLE | BS_NOTIFY | BS_DEFPUSHBUTTON), 258, 8, 73, 25, hWnd, (HMENU)ID_BTN_OK, hInstance, NULL);
-			 SendMessage(hOK, WM_SETFONT, (WPARAM)hFont_Main, 0);
+			hwndTemp = CreateButton("OK", (WS_CHILD | WS_GROUP | WS_TABSTOP | WS_VISIBLE), 258, 8, 73, 25, hWnd, ID_BTN_OK, hInstance);
+			 SendMessage(hwndTemp, WM_SETFONT, (WPARAM)hFont_Main, 0);
 			
-			if (hBackground == NULL) hBackground = CreateGradientBitmap(ClientWidth(hWnd), ClientHeight(hWnd), BG_GB_COLOR_TL, BG_GB_COLOR_BL, BG_GB_COLOR_TR, BG_GB_COLOR_BR);
 			break;
 
 		case WM_ACTIVATE:
 
 			if ((LOWORD(wParam) != WA_INACTIVE) && (HIWORD(wParam) == FALSE))
-			{ SetFocus(hOK); return 0; }
+			{ SetFocus(GetDlgItem(hWnd, ID_BTN_OK)); SendMessage(hWnd, DM_SETDEFID, ID_BTN_OK, NULL); return 0; }
 			
 			break;
+
+		case DM_GETDEFID:
+			
+			return (MAKELONG(ID_BTN_OK, DC_HASDEFID));
 
 		case WM_PAINT:
 
@@ -115,10 +115,12 @@ LRESULT CALLBACK frmAboutProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 			SelectObject(hDC, hftTemp);
 			SelectObject(hDC2, hbmTemp); DeleteDC(hDC2);
 			EndPaint(hWnd, &ps);
+			
 			return TRUE;
 		
 		case WM_SYSCOLORCHANGE:
 
+			// Redraw background
 			hDC = CreateCompatibleDC(NULL); hbmTemp = (HBITMAP)SelectObject(hDC, hBackground);
 			DrawGradientRect(hDC, 0, 0, ClientWidth(hWnd), ClientHeight(hWnd), BG_GB_COLOR_TL, BG_GB_COLOR_BL, BG_GB_COLOR_TR, BG_GB_COLOR_BR);
 			SelectObject(hDC, hbmTemp); DeleteDC(hDC);
@@ -131,31 +133,35 @@ LRESULT CALLBACK frmAboutProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 				// Control Notification
 				// ---------------------
 
-				switch (HIWORD(wParam))
-				{
-				case BN_CLICKED:				// Button Clicked
-					switch (LOWORD(wParam)) {
-					case ID_BTN_OK:				// OK button
-						DestroyWindow(hWnd);
-						break;
+				switch (LOWORD(wParam)) {
+				case (ID_BTN_OK | BN_CLICKED):			// OK button
+					
+					switch (HIWORD(wParam)) {
+					case BN_CLICKED:
+					
+						SendMessage(hWnd, WM_CLOSE, 0, 0);
+						return 0;
 					}
 				}
 			}
 
 			break;
 
-		case WM_WINDOWPOSCHANGING:
-		case WM_WINDOWPOSCHANGED:
+		case WM_CLOSE:
 			
-			// End Modal Loop:
-			if (((LPWINDOWPOS)lParam)->flags & SWP_HIDEWINDOW) EndAbout(hWnd);
-			break;
+			// End the dialog
+			EndDialog(hWnd, 0);
+			return 0;
 
 		case WM_DESTROY:
 
 			// Clean up
 			// ---------
 
+			// Failsafe
+			EndDialog(hWnd, 0);
+
+			// Clean up shared data
 			if (--nWindowCount == 0) {
 				DestroyIcon(hicoLogo); hicoLogo = NULL;
 				DeleteObject(hBackground); hBackground = NULL;
@@ -164,7 +170,7 @@ LRESULT CALLBACK frmAboutProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 			break;
 	}
 
-	return DefWindowProc(hWnd, uMsg, wParam, lParam);
+	return DefDlgProc(hWnd, uMsg, wParam, lParam);
 }
 
 
@@ -172,17 +178,5 @@ LRESULT CALLBACK frmAboutProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 // Public Functions
 // -----------------
 
-void DoAbout (HWND hOwner)
-{
-	HWND hWnd;
-	hWnd = CreateWindowEx((WS_EX_DLGMODALFRAME | WS_EX_CONTROLPARENT | WS_EX_WINDOWEDGE), ID_ABOUTWND_CLASSNAME, "About Checkers", (WS_POPUPWINDOW | WS_DLGFRAME  | WS_OVERLAPPED | WS_CAPTION | WS_CLIPSIBLINGS), CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, hOwner, NULL, hInstance, NULL);
-	DoModal(hWnd, hOwner);		// Modal loop
-}
-
-
-
-// Local Functions
-// ----------------
-
-VOID EndAbout (HWND hWnd)
-{ EndModal(hWnd, 0); }
+void DoAbout (HWND hParent)
+{ CreateDialogBox((WS_EX_CONTROLPARENT | WS_EX_DLGMODALFRAME | WS_EX_WINDOWEDGE), ID_ABOUTWND_CLASSNAME, "About Checkers", (WS_VISIBLE | WS_POPUPWINDOW | WS_DLGFRAME | WS_CAPTION | WS_SYSMENU | WS_CLIPSIBLINGS | DS_NOIDLEMSG | DS_SETFOREGROUND), CW_USEDEFAULT, CW_USEDEFAULT, 344, 178, hParent, NULL, 0, hInstance, NULL, NULL, true); }

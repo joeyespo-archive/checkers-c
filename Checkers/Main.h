@@ -12,7 +12,6 @@
 
 #include <Windows.h>
 #include <eLibWin.h>
-#include <eModal.h>
 #include <eThemes.h>
 #include <eGradient.h>
 #include <RichEdit.h>

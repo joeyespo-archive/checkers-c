@@ -105,14 +105,6 @@ SOURCE=.\Main.h
 # PROP Default_Filter "h,hpp,h++,hxx"
 # Begin Source File
 
-SOURCE=..\..\Include\eCheckers.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Include\eCkWindow.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\frmAbout.h
 # End Source File
 # Begin Source File
@@ -149,11 +141,11 @@ SOURCE=.\Libraries.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\Include\eCheckers\eCkGame.h
+SOURCE=..\..\..\Include\eCheckers\eCkGame.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\Include\eCkWindow\eCkWindow.h
+SOURCE=..\..\..\Include\eCkWindow\eCkWindow.h
 # End Source File
 # End Group
 # Begin Group "Checkers Sources"
@@ -161,13 +153,29 @@ SOURCE=..\..\Include\eCkWindow\eCkWindow.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\Include\eCheckers\eCkGame.cpp
+SOURCE=..\..\..\Include\eCheckers\eCkGame.cpp
+
+!IF  "$(CFG)" == "Checkers - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "Checkers - Win32 Debug"
+
 # PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\Include\eCkWindow\eCkWindow.cpp
+SOURCE=..\..\..\Include\eCkWindow\eCkWindow.cpp
+
+!IF  "$(CFG)" == "Checkers - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "Checkers - Win32 Debug"
+
 # PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # End Group
 # Begin Group "Resource Files"
