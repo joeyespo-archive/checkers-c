@@ -24,7 +24,7 @@
 // -------------
 
 #include <eLibWin.cpp>
-
+#include <eGradient\Main.cpp>
 
 
 // Globals

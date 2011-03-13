@@ -17,6 +17,8 @@
 #include <Windows.h>
 #include <mmSystem.h>
 #include <RichEdit.h>
+
+// eLib Headers
 #include <eLibWin.h>
 #include <eThemes.h>
 #include <eGradient.h>
